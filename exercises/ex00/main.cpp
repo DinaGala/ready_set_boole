@@ -1,9 +1,10 @@
 #include <iostream>
 #include <limits>
 #include <cstdint>
-#include "add.hpp"
+#include "../../inc/rsb.hpp"
 
 int main() {
+    using namespace rsb;
     uint32_t a, b;
 
     a = 0u; b = 0u;

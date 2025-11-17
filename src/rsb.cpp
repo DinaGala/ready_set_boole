@@ -39,7 +39,7 @@ namespace rsb {
         std::shared_ptr<ASTNode> root = parse_rpn(formula);
         if (!root) {
             std::cerr << "Invalid formula\n";
-            return false; // или можно выбросить исключение
+            return false; // or throw an exception
         }
         if (root) {
             std::cout << "AST: ";

@@ -1,7 +1,7 @@
 
 # Use the C++ compiler for linking to pull in the C++ standard library
-CXX=c++
-CXXFLAGS=-std=c++17 -Wall -Wextra -Werror 
+CXX=g++
+CXXFLAGS=-std=c++17 -Wall -Wextra -Werror -g -O0
 INC := -I ./inc
 AR := ar
 ARFLAGS := rcs
@@ -27,7 +27,7 @@ EXE_DIRS := $(addprefix exercises/,$(EXERCISES))
 # Build binary paths by prefixing the bin dir to exercise names
 EXES := $(addprefix $(BIN_DIR)/,$(EXERCISES))
 
-all: dirs $(LIB_PATH) exercises
+all: dirs $(LIB_PATH) exercises Makefile
 	@echo "Build complete. Binaries in $(BIN_DIR)."
 
 # create build dirs

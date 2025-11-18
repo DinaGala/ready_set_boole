@@ -35,6 +35,7 @@ namespace rsb {
         return n ^ (n >> 1);
     }
 
+    //ex03
     bool eval_formula(const std::string &formula) {
         std::shared_ptr<ASTNode> root = parse_rpn(formula);
         if (!root) {
@@ -56,15 +57,19 @@ namespace rsb {
                 case '0': s.push(std::make_shared<ASTNode>(false)); break;
                 case '1': s.push(std::make_shared<ASTNode>(true)); break;
                 case '!': {
-                    if (s.empty()) return nullptr;
-                    std::shared_ptr<ASTNode> e = s.top(); s.pop();
+                    if (s.empty()) 
+                        return nullptr;
+                    std::shared_ptr<ASTNode> e = s.top(); 
+                    s.pop();
                     s.push(std::make_shared<ASTNode>(NodeType::NOT, e));
                     break;
                 }
                 case '&': case '|': case '^': case '>': case '=': {
                     if (s.size() < 2) return nullptr;
-                    std::shared_ptr<ASTNode> b = s.top(); s.pop();
-                    std::shared_ptr<ASTNode> a = s.top(); s.pop();
+                    std::shared_ptr<ASTNode> b = s.top(); 
+                    s.pop();
+                    std::shared_ptr<ASTNode> a = s.top(); 
+                    s.pop();
                     NodeType t = (c == '&') ? NodeType::AND :
                                 (c == '|') ? NodeType::OR :
                                 (c == '^') ? NodeType::XOR :
@@ -77,6 +82,11 @@ namespace rsb {
             }
         }
         return (s.size() == 1) ? s.top() : nullptr;
+    }
+
+    // ex04
+    void print_truth_table(const std::string &formula) {
+    
     }
 
 } 

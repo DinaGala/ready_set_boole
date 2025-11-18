@@ -13,6 +13,7 @@ enum class NodeType {
 struct ASTNode {
     NodeType type;
     bool value; // used if type == CONST
+    char var;   // variable name if needed
     std::shared_ptr<ASTNode> left;   // for binary operators
     std::shared_ptr<ASTNode> right;  // for binary operators
     std::shared_ptr<ASTNode> child;  // for unary operator NOT
@@ -24,7 +25,10 @@ struct ASTNode {
 
     bool eval() {
         switch(this->type) {
-            case NodeType::CONST: return this->value;
+            case NodeType::CONST:
+                if (var >= 'A' && var <= 'Z')
+                    return env.at(var);   // variable
+                return value;             // real constant (0 or 1)
             case NodeType::NOT: return !this->child->eval();
             case NodeType::AND: return this->left->eval() && this->right->eval();
             case NodeType::OR: return this->left->eval() || this->right->eval();
@@ -63,5 +67,8 @@ namespace rsb {
     // ex03 - boolean formula evaluation
     bool eval_formula(const std::string &formula);
     std::shared_ptr<ASTNode> parse_rpn(const std::string &formula);
+
+    // ex04 - truth table
+    void print_truth_table(const std::string &formula);
     
 } 

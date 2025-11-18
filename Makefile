@@ -17,7 +17,7 @@ LIB_NAME := librsb.a
 LIB_PATH := $(LIB_DIR)/$(LIB_NAME)
 
 # list exercises by folder name under exercises/
-EXERCISES := ex00 ex01 ex02 ex03 #ex04 ex05 ex06 ex07 ex08 ex09 ex10 ex11
+EXERCISES := ex00 ex01 ex02 ex03 ex04 #ex05 ex06 ex07 ex08 ex09 ex10 ex11
 
 # derived lists
 SRC := $(wildcard $(SRC_DIR)/*.cpp)

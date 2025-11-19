@@ -5,6 +5,8 @@
 #include <iostream>
 #include <stack>
 #include <string>
+#include <map>
+#include <stdexcept>
 
 enum class NodeType {
     CONST, NOT, AND, OR, XOR, IMPLIES, EQUIV
@@ -23,20 +25,36 @@ struct ASTNode {
     ASTNode(NodeType t, std::shared_ptr<ASTNode> l, std::shared_ptr<ASTNode> r) 
         : type(t), left(l), right(r) {}
 
-    bool eval() {
-        switch(this->type) {
+    bool contains_variable() const {
+        if (type == NodeType::CONST && var >= 'A' && var <= 'Z') 
+            return true;
+        if (left && left->contains_variable()) 
+            return true;
+        if (right && right->contains_variable()) 
+            return true;
+        return false;
+    }
+
+    bool eval(const std::map<char,bool>& env) const {
+        switch (type) {
             case NodeType::CONST:
-                if (var >= 'A' && var <= 'Z')
-                    return env.at(var);   // variable
-                return value;             // real constant (0 or 1)
-            case NodeType::NOT: return !this->child->eval();
-            case NodeType::AND: return this->left->eval() && this->right->eval();
-            case NodeType::OR: return this->left->eval() || this->right->eval();
-            case NodeType::XOR: return this->left->eval() != this->right->eval();
-            case NodeType::IMPLIES: return !this->left->eval() || this->right->eval();
-            case NodeType::EQUIV: return this->left->eval() == this->right->eval();
+                if (var >= 'A' && var <= 'Z') return env.at(var);
+                return value;
+            case NodeType::NOT: return !left->eval(env);
+            case NodeType::AND: return left->eval(env) && right->eval(env);
+            case NodeType::OR:  return left->eval(env) || right->eval(env);
+            case NodeType::XOR: return left->eval(env) != right->eval(env);
+            case NodeType::IMPLIES: return !left->eval(env) || right->eval(env);
+            case NodeType::EQUIV: return left->eval(env) == right->eval(env);
         }
-        return false; // should never reach
+        return false;
+    }
+
+    bool eval() const {
+        if (contains_variable()) 
+            throw std::logic_error("eval() called on non-ground AST");
+        std::map<char,bool> empty;
+        return eval(empty);
     }
 
     void print(const std::shared_ptr<ASTNode>& node) {
